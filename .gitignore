@@ -6,3 +6,7 @@ backend/metadata.json
 backend/metadata.backup.json
 uploads/
 backend/uploads/
+
+# SQLite database files
+backend/data/
+backend/data/db.sqlite3

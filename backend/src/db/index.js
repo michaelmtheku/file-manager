@@ -21,8 +21,7 @@ function ensureDataDir() {
  * - Otherwise returns a Database opened at DATABASE_URL or DEFAULT_DB_FILE.
  */
 export function getDb() {
-  const useMemory =
-    process.env.DATABASE_URL === ':memory:' || process.env.USE_IN_MEMORY_DB === '1';
+  const useMemory = process.env.DATABASE_URL === ':memory:' || process.env.USE_IN_MEMORY_DB === '1';
 
   if (!useMemory) {
     ensureDataDir();
