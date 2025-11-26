@@ -8,7 +8,7 @@ export function authenticate(req, res, next) {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const db = loadMetadata();
-    const user = db.users.find(u => u.id === payload.sub);
+    const user = db.users.find((u) => u.id === payload.sub);
     if (!user) return res.status(401).json({ message: 'User not found' });
     req.user = { id: user.id, email: user.email };
     next();

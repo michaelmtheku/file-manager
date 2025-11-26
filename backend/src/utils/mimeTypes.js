@@ -1,6 +1,1 @@
-export const previewableMimeTypes = [
-  'image/png',
-  'image/jpeg',
-  'image/gif',
-  'application/pdf'
-];
+export const previewableMimeTypes = ['image/png', 'image/jpeg', 'image/gif', 'application/pdf'];

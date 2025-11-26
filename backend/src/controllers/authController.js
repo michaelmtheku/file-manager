@@ -8,7 +8,7 @@ export async function register(req, res, next) {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Email & password required' });
     const db = loadMetadata();
-    if (db.users.find(u => u.email === email)) {
+    if (db.users.find((u) => u.email === email)) {
       return res.status(409).json({ message: 'Email already registered' });
     }
     const hash = await bcrypt.hash(password, 10);
@@ -26,7 +26,7 @@ export async function login(req, res, next) {
   try {
     const { email, password } = req.body;
     const db = loadMetadata();
-    const user = db.users.find(u => u.email === email);
+    const user = db.users.find((u) => u.email === email);
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) return res.status(401).json({ message: 'Invalid credentials' });

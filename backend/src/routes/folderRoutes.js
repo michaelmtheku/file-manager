@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import {
-  createFolder,
-  listFolders
-} from '../controllers/folderController.js';
+import { createFolder, listFolders } from '../controllers/folderController.js';
 import { authenticate } from '../middleware/auth.js';
 
 const router = Router();

@@ -34,7 +34,7 @@ export function createFile({ filename, owner = null, size = 0, mime = '', metada
   const id = randomUUID();
   const created_at = Date.now();
   const stmt = db.prepare(
-    `INSERT INTO files (id, filename, owner, size, mime, created_at, metadata) VALUES (?, ?, ?, ?, ?, ?, ?)`
+    \`INSERT INTO files (id, filename, owner, size, mime, created_at, metadata) VALUES (?, ?, ?, ?, ?, ?, ?)\`
   );
   stmt.run(id, filename, owner, size, mime, created_at, JSON.stringify(metadata || {}));
   return getFileById(id);

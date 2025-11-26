@@ -1,3 +1,4 @@
+
 module.exports = {
   root: true,
   env: { es2021: true },
@@ -5,7 +6,9 @@ module.exports = {
   extends: ['eslint:recommended', 'plugin:import/recommended', 'prettier'],
   plugins: ['import', 'prettier'],
   rules: {
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'error',
+    // ignore unused function args that start with an underscore (useful for Express _next)
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
   },
   overrides: [
     {

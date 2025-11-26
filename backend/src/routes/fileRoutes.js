@@ -8,8 +8,9 @@ import {
   deleteFile,
   renameFile,
   moveFile,
-  getFileMetadata
+  getFileMetadata,
 } from '../controllers/fileController.js';
+import { shareFile, unshareFile, listFileShares } from '../controllers/fileShareController.js';
 import { authenticate } from '../middleware/auth.js';
 
 config();
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
     const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, unique + ext);
-  }
+  },
 });
 const upload = multer({ storage });
 
@@ -32,5 +33,10 @@ router.post('/upload', authenticate, upload.array('files', 10), uploadFiles);
 router.patch('/:id/rename', authenticate, renameFile);
 router.patch('/:id/move', authenticate, moveFile);
 router.delete('/:id', authenticate, deleteFile);
+
+// Collaboration
+router.post('/:id/share', authenticate, shareFile);
+router.post('/:id/unshare', authenticate, unshareFile);
+router.get('/:id/shares', authenticate, listFileShares);
 
 export default router;

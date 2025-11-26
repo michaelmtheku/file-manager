@@ -17,8 +17,8 @@ router.get('/info', (req, res, next) => {
       backend: 'file-manager-backend',
       counts: {
         users: usersCount,
-        files: filesCount
-      }
+        files: filesCount,
+      },
     });
   } catch (err) {
     // forward to generic error handler

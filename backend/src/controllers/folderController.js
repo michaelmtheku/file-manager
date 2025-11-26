@@ -11,7 +11,7 @@ export function createFolder(req, res, next) {
       name,
       parentFolder: parentFolder || null,
       ownerId: req.user.id,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     db.folders.push(folder);
     saveMetadata(db);
@@ -25,7 +25,9 @@ export function listFolders(req, res, next) {
   try {
     const parentFolder = req.query.parent || null;
     const db = loadMetadata();
-    const folders = db.folders.filter(f => f.parentFolder === parentFolder && f.ownerId === req.user.id);
+    const folders = db.folders.filter(
+      (f) => f.parentFolder === parentFolder && f.ownerId === req.user.id
+    );
     res.json({ folders });
   } catch (e) {
     next(e);
