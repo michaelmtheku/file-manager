@@ -1,20 +1,22 @@
-// Ensure test metadata and uploads exist before tests run
+// Ensure test environment uses in-memory DB
 import fs from 'fs';
 import path from 'path';
 
-const metaFileName = process.env.METADATA_FILE || 'metadata.json';
-const metaFilePath = path.resolve(process.cwd(), metaFileName);
+// Set environment variables for tests
+process.env.USE_IN_MEMORY_DB = '1';
+process.env.JWT_SECRET = 'test-secret-key-for-testing-only';
+process.env.JWT_EXPIRES_IN = '1h';
 
-const initial = { users: [], files: [] };
+// Initialize the DB schema for tests
+import initDb from '../src/db/migrations/init.js';
 
 try {
-  // create or overwrite metadata file for tests (idempotent)
-  fs.writeFileSync(metaFilePath, JSON.stringify(initial, null, 2), 'utf8');
+  initDb();
   // eslint-disable-next-line no-console
-  console.log('Test metadata created at', metaFilePath);
+  console.log('Test DB initialized (in-memory)');
 } catch (e) {
   // eslint-disable-next-line no-console
-  console.error('Failed to create metadata file for tests:', e);
+  console.error('Failed to initialize test DB:', e);
 }
 
 const uploadDir = process.env.UPLOAD_DIR
@@ -29,9 +31,3 @@ try {
   // eslint-disable-next-line no-console
   console.error('Failed to create upload dir for tests:', e);
 }
-
-// Optional cleanup after tests:
-// afterAll(() => {
-//   try { fs.unlinkSync(metaFilePath); } catch (e) {}
-//   // optionally remove uploads contents
-// });

@@ -5,16 +5,18 @@ export default function initDb() {
 
   // wrap schema creation in a transaction for safety
   const create = db.transaction(() => {
-    db.exec(\`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY,
         name TEXT,
         email TEXT,
+        passwordHash TEXT,
+        createdAt TEXT,
         created_at INTEGER
       );
-    \`);
+    `);
 
-    db.exec(\`
+    db.exec(`
       CREATE TABLE IF NOT EXISTS files (
         id TEXT PRIMARY KEY,
         filename TEXT NOT NULL,
@@ -25,7 +27,7 @@ export default function initDb() {
         metadata TEXT,
         FOREIGN KEY(owner) REFERENCES users(id) ON DELETE SET NULL
       );
-    \`);
+    `);
   });
 
   create();

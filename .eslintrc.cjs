@@ -8,7 +8,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     // ignore unused function args that start with an underscore (useful for Express _next)
-    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }]
   },
   overrides: [
     {

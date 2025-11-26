@@ -3,7 +3,9 @@ import path from 'path';
 import initDb from './init.js';
 import { randomUUID } from 'crypto';
 
-export default function importFromJson(filePath = path.resolve(process.cwd(), 'backend', 'metadata.json')) {
+export default function importFromJson(
+  filePath = path.resolve(process.cwd(), 'backend', 'metadata.json')
+) {
   if (!fs.existsSync(filePath)) {
     console.log('No metadata.json file found at', filePath);
     return;
@@ -24,10 +26,19 @@ export default function importFromJson(filePath = path.resolve(process.cwd(), 'b
   const files = data.files || [];
 
   const tx = db.transaction((uRows, fRows) => {
-    const insertUser = db.prepare('INSERT INTO users (id, name, email, created_at) VALUES (?, ?, ?, ?)');
+    const insertUser = db.prepare(
+      'INSERT INTO users (id, name, email, passwordHash, createdAt, created_at) VALUES (?, ?, ?, ?, ?, ?)'
+    );
     for (const u of uRows) {
       const id = u.id || randomUUID();
-      insertUser.run(id, u.name || '', u.email || '', u.created_at || Date.now());
+      insertUser.run(
+        id,
+        u.name || '',
+        u.email || '',
+        u.passwordHash || null,
+        u.createdAt || null,
+        u.created_at || Date.now()
+      );
     }
 
     const insertFile = db.prepare(
