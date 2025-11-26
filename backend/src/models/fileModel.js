@@ -30,10 +30,12 @@ export function getFileById(id) {
 export function createFile({ filename, owner = null, size = 0, mime = '', metadata = {} }) {
   const id = randomUUID();
   const created_at = Date.now();
+  // Store the complete file object in metadata for consistency with rowToFile
+  const fileObj = { id, filename, owner, size, mime, created_at, ...metadata };
   const stmt = db.prepare(
     `INSERT INTO files (id, filename, owner, size, mime, created_at, metadata) VALUES (?, ?, ?, ?, ?, ?, ?)`
   );
-  stmt.run(id, filename, owner, size, mime, created_at, JSON.stringify(metadata || {}));
+  stmt.run(id, filename, owner, size, mime, created_at, JSON.stringify(fileObj));
   return getFileById(id);
 }
 
@@ -104,7 +106,11 @@ export function saveMetadata({ users = [], files = [] } = {}) {
     );
     for (const f of fRows) {
       const id = f.id || randomUUID();
-      // Extract some common fields for indexing, but store the complete object in metadata
+      // Field mapping for backward compatibility:
+      // - originalName/filename/name → filename (for search/indexing)
+      // - ownerId/owner → owner (for access control queries)
+      // - mimeType/mime → mime (for content type filtering)
+      // The complete file object (with original field names) is stored in metadata column
       const filename = f.originalName || f.filename || f.name || '';
       const owner = f.ownerId || f.owner || null;
       const size = f.size || 0;
